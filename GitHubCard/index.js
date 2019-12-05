@@ -1,12 +1,8 @@
 /* Step 1: using axios, send a GET request to the following URL 
            (replacing the palceholder with your Github name):
-           */
-const entryPoint = document.querySelector('.cards');
-  axios.get('https://api.github.com/users/amohler09')
-    .then(response => {
-     console.log(response);
-  })
-  
+           
+
+  */
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -19,6 +15,14 @@ const entryPoint = document.querySelector('.cards');
            create a new component and add it to the DOM as a child of .cards
 */
 
+const entryPoint = document.querySelector('.cards');
+
+  /*axios.get('https://api.github.com/users/amohler09')
+      .then (response => {
+      entryPoint.appendChild(getUser(response));
+    })*/
+    
+
 /* Step 5: Now that you have your own card getting added to the DOM, either 
           follow this link in your browser https://api.github.com/users/<Your github name>/followers 
           , manually find some other users' github handles, or use the list found 
@@ -29,7 +33,19 @@ const entryPoint = document.querySelector('.cards');
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ["TylerBiswell", "asahmed93", "kristian-fulkerson", "derekdyer0309", "dorenafortune"];
+
+followersArray.forEach(user => {
+  const myFollowers = `https://api.github.com/users/${user}`;
+  axios.get(myFollowers)
+  .then(response => {
+    entryPoint.appendChild(getUser(response));
+  })
+})
+
+
+
+
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -65,16 +81,23 @@ function getUser(object) {
   const following = document.createElement('p');
   const bio = document.createElement('p');
 
+  /*-----------Styles--------------------------*/
+  name.style.marginBottom = '5%';
+  location.style.marginBottom = '3%';
+  profile.style.marginBottom = '3%';
+  followers.style.marginBottom = '3%';
+  following.style.marginBottom = '3%';
+
+
   /*------------Text Content------------------ */
-  newImg.src = object.avatar_url;
-  name.textContent = object.name;
-  username.textContent = object.login;
-  location.textContent = object.location;
-  profile.textContent = 'Profile:';
-  gitUrl.src = object.html_url;
-  followers.textContent = object.followers;
-  following.textContent = object.following;
-  bio.textContent = 'Bio: ${object.bio)';
+  newImg.src = object.data.avatar_url;
+  name.textContent = object.data.name;
+  username.textContent = `Username: ${object.data.login}`;
+  location.textContent = `Location: ${object.data.location}`;
+  profile.textContent = `Profile: ${object.data.html_url}`;
+  followers.textContent = `Followers: ${object.data.followers}`;
+  following.textContent = `Following: ${object.data.following}`;
+  bio.textContent = `Bio: ${object.data.bio}`;
 
   /*--------------Classes------------------------ */
   newCard.classList.add('card');
